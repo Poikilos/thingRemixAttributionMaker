@@ -131,7 +131,8 @@
       //or:
       // See https://www.w3schools.com/jsref/met_document_createelement.asp
       var btn = document.createElement("BUTTON");   // Create a <button> element
-      btn.setAttribute("class", "grey-button");
+      btn.setAttribute("class", "button button-secondary");
+      btn.setAttribute("style", "background-color: rgb(50%, 50%, 50%)");
       var btnText = "Copy License for Remix";
       btn.innerHTML = btnText;                   // Insert text
 
