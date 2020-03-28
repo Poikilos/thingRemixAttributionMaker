@@ -1,4 +1,12 @@
 # Changelog
+
+
+## [2.0.1] - 2020-03-28
+### Changed
+- Mimic the old button style using the new button classes with a custom
+  `background-color` (otherwise `button button-secondary` is white on
+  light gray as of March 28, 2020).
+
 ## [2.0] - 2020-03-28
 ### Changed
 - Change the tab width to two spaces to match Firefox's script editor.
@@ -9,6 +17,7 @@
     instead of a full class name.
 - Add needle (search string) variables for clarity of meaning and to
   ensure that all uses match whenever there is a change.
+
 
 ## [1.0 (greesyfork.org)] - 2020-01-03
 ### Changed
