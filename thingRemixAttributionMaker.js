@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Thing Remix Attribution Maker
 // @namespace    http://poikilos.org/
-// @version      2.0
+// @version      2.0.1
 // @description  Format the license information from a thing page
 // @author       Poikilos (Jake Gustafson)
 // @include      https://www.thingiverse.com/thing:*
