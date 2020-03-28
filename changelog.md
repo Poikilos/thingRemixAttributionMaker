@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.0.2] - 2020-03-28
+### Fixed
+- Handle CC0 properly even if improper symbols are present.
 
 ## [2.0.1] - 2020-03-28
 ### Changed

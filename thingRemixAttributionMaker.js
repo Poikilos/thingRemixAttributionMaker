@@ -209,6 +209,10 @@
           else if (aspectImg.src.endsWith("sa.svg")) {
             info.license += sep + "ShareAlike"; // It has a space on ThingiVerse, but that is not correct.
           }
+          else if (aspectImg.src.endsWith("zero.svg")) {
+             // It is preceded by by.svg on ThingiVerse, but that is not correct.
+            info.license = "Creative Commons Zero";
+          }
           else {
             console.error("The license symbol list has an unknown clause symbol: " + aspectImg.src);
           }
