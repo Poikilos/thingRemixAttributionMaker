@@ -20,8 +20,12 @@
   var doneDivPrefixes = [titlePrefix, headingCreatedPrefix];
   var clausesContainerPrefix = "License__ccLicense";
   var doneDivPrefixesMain = [clausesContainerPrefix];
+  var verbose = false;
   function getElementsWhereClassStartsWith(str) {
-    // console.log("getElementsWhereClassStartsWith...");
+    if (verbose) {
+      console.log("");
+      console.log("getElementsWhereClassStartsWith(\""+str+"\")...");
+    }
     var els = [];
     var all = document.getElementsByTagName("*");
     for (var i=0, max=all.length; i < max; i++) {
@@ -30,45 +34,62 @@
         els.push(el);
       }
     }
+    if (verbose) {
+      console.log("- FOUND " + els.length);
+    }
     return els;
   }
   function getDivsWhereClassStartsWith(str) {
-    // console.log("getDivsWhereClassStartsWith...");
+    if (verbose) {
+      console.log("");
+      console.log("FIND getDivsWhereClassStartsWith(\"" + str + "\")...");
+    }
     var els = [];
     var all = document.getElementsByTagName("div");
     for (var i=0, max=all.length; i < max; i++) {
       var el = all[i];
       if (el.className.startsWith(str)) {
         els.push(el);
+        // console.log("- FOUND (" + els.length + ")");
       }
       else {
-        // console.log(el.className + " does not start with it.");
+        // console.log("- " + el.className + " does not start with it.");
       }
     }
-    // console.log("Div count: " + all.length);
+    if (verbose) {
+      // console.log("Div count: " + all.length);
+      console.log("- FOUND " + els.length);
+    }
     return els;
   }
   function getWhereClassStartsWithIn(el, str) {
     if (el === undefined) {
-	    console.log("[getWhereClassStartsWithIn] Error: el is undefined.");
+	  console.log("[getWhereClassStartsWithIn] Error: el is undefined.");
       return [];
     }
-    // console.log("getWhereClassStartsWithIn...");
-    // console.log("  el: " + JSON.stringify(el));
-    // console.log("  el.className: "+el.className);
-    // console.log("  el.childNodes.length:"+el.childNodes.length+"...");
+    if (verbose) {
+      console.log("");
+      console.log("DETECT getWhereClassStartsWithIn(el, \""+str+"\")...");
+      // console.log("  el: " + JSON.stringify(el)); // DON'T do (could be circular)
+      console.log("  el.className: "+el.className);
+      console.log("  el.childNodes.length:"+el.childNodes.length+"...");
+    }
     var els = [];
     var all = el.childNodes;
     for (var i=0, max=all.length; i < max; i++) {
       var thisEl = all[i];
       if (thisEl.className.startsWith(str)) {
         els.push(thisEl);
+        // console.log("- FOUND");
       }
       else {
-        // console.log(el.className + " does not start with it.");
+        // console.log("- "+el.className+" does not start with it.");
       }
     }
-    // console.log("  done (div count: " + all.length + ")");
+    if (verbose) {
+      console.log("- FOUND " + els.length);
+      // console.log("- done (div count: " + all.length + ")");
+    }
     return els;
   }
   function hasAllDivPrefixes(prefixes) {
@@ -443,6 +464,10 @@
       // console.log("The page has loaded.");
       clearInterval(checkTimer);
       addButton();
+      console.log("The license detection will resume after a user clicks the copy license button.");
+    }
+    else {
+      console.log("The document is not ready (or is missing required fields)...");
     }
   }
   checkTimer = setInterval(checkIfComplete, 2000);
