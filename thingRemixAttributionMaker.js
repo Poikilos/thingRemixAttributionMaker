@@ -60,9 +60,9 @@
     var els = [];
     var all = el.childNodes;
     for (var i=0, max=all.length; i < max; i++) {
-      var el = all[i];
-      if (el.className.startsWith(str)) {
-        els.push(el);
+      var thisEl = all[i];
+      if (thisEl.className.startsWith(str)) {
+        els.push(thisEl);
       }
       else {
         // console.log(el.className + " does not start with it.");
@@ -130,11 +130,11 @@
       // pageInfoE.innerHTML += "<button onclick=\"getRemixLicense()\">Copy License for Remix</button>";
       //or:
       // See https://www.w3schools.com/jsref/met_document_createelement.asp
-      var btn = document.createElement("BUTTON");   // Create a <button> element
+      var btn = document.createElement("BUTTON"); // Create a <button> element
       btn.setAttribute("class", "button button-secondary");
       btn.setAttribute("style", "background-color: rgb(50%, 50%, 50%)");
       var btnText = "Copy License for Remix";
-      btn.innerHTML = btnText;                   // Insert text
+      btn.innerHTML = btnText; // Insert text
 
       btn.addEventListener("click", function(){
         btn.innerHTML = btnText;
@@ -345,10 +345,12 @@
               }
             }
           }
-          if (info.licenseHref)
+          if (info.licenseHref) {
             outputStr += "[" + info.license + "](" + info.licenseHref + ")";
-          else
+          }
+          else {
             outputStr += info.license;
+          }
           if (licenseShortStr.length > 0) {
             outputStr += "\n  (" + licenseShortStr + ")";
           }
@@ -361,15 +363,19 @@
         }
         if (info.title) {
           outputStr += "\n- based on";
-          if (info.titleHref)
+          if (info.titleHref) {
             outputStr += " [" + info.title + "](" + info.titleHref + ")";
-          else
+          }
+          else {
             outputStr += " " + info.title;
+          }
           if (info.author) {
-            if (info.authorHref)
+            if (info.authorHref) {
               outputStr += " by [" + info.author + "](" + info.authorHref + ")";
-            else
+            }
+            else {
               outputStr += " by " + info.author;
+            }
           }
           if (info.year) {
             outputStr += " ";
@@ -404,15 +410,12 @@
         if (msg != null) {
           btn.innerHTML += msg;
         }
-
-        i = null
       });
-      pageInfoE.appendChild(btn);               // Append <button> to <body>
+      pageInfoE.appendChild(btn); // Append <button> to <body>
     }
     else {
       console.log('The '+madeDivClassName+' class was not found!');
     }
-    i = null;
   }//end addButton
   function checkIfComplete() {
     // console.log("Monitoring page loading...");
