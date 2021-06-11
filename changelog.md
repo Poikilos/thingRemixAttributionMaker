@@ -1,8 +1,20 @@
 # Changelog
+## [2.1.0] - 2021-06-11
+### Added
+- Add lookup tables to detect the license short name and long name from the URL if necessary
+
+### Changed
+- Add a `verbose` boolean instead of commenting verbose output lines.
+- Improve verbose output (Add quotes around values, provide more explanations, and log more situations).
+
+### Fixed
+- Handle broken the current broken website layout or other issues that cause the license clause list to be missing by deriving the short and long license names from the URL.
+
 
 ## [2.0.2] - 2020-03-28
 ### Fixed
 - Handle CC0 properly even if improper symbols are present.
+- Fix a mixture of spaces and tabs in some places.
 
 ## [2.0.1] - 2020-03-28
 ### Changed

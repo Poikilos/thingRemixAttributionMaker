@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Thing Remix Attribution Maker
 // @namespace    http://poikilos.org/
-// @version      2.0.2
+// @version      2.1.0
 // @description  Format the license information from a thing page
 // @author       Poikilos (Jake Gustafson)
 // @include      https://www.thingiverse.com/thing:*
@@ -64,7 +64,7 @@
   }
   function getWhereClassStartsWithIn(el, str) {
     if (el === undefined) {
-	  console.log("[getWhereClassStartsWithIn] Error: el is undefined.");
+      console.log("[getWhereClassStartsWithIn] Error: el is undefined.");
       return [];
     }
     if (verbose) {
@@ -122,6 +122,9 @@
     return els;
   }
   function getAnchorsWhereClassStartsWith(str) {
+    if (verbose) {
+        console.log("getAnchorsWhereClassStartsWith(\""+str+"\")...")
+    }
     var els = [];
     var all = document.getElementsByTagName("a");
     for (var i=0, max=all.length; i < max; i++) {
@@ -129,6 +132,10 @@
       if (el.className.startsWith(str)) {
         els.push(el);
       }
+    }
+    if (verbose) {
+      console.log("- FOUND " + els.length);
+      // console.log("- done (div count: " + all.length + ")");
     }
     return els;
   }
@@ -156,7 +163,77 @@
       btn.setAttribute("style", "background-color: rgb(50%, 50%, 50%)");
       var btnText = "Copy License for Remix";
       btn.innerHTML = btnText; // Insert text
-
+      // Any URL starting with a slash comes after: "https://creativecommons.org/licenses"
+      // otherwise it comes after "https://"
+      // - A list of CC licenses is at <https://creativecommons.org/about/cclicenses/>.
+      var urlSmallNames = {
+        "/by/1.0": "CC BY 1.0",
+        "/by/2.0": "CC BY 2.0",
+        "/by/2.5": "CC BY 2.5",
+        "/by/3.0": "CC BY 3.0",
+        "/by/4.0": "CC BY 4.0",
+        "/by-sa/1.0": "CC BY-SA 1.0",
+        "/by-sa/2.0": "CC BY-SA 2.0",
+        "/by-sa/2.5": "CC BY-SA 2.5",
+        "/by-sa/3.0": "CC BY-SA 3.0",
+        "/by-sa/4.0": "CC BY-SA 4.0",
+        "/by-nc/1.0": "CC BY-NC 1.0",
+        "/by-nc/2.0": "CC BY-NC 2.0",
+        "/by-nc/2.5": "CC BY-NC 2.5",
+        "/by-nc/3.0": "CC BY-NC 3.0",
+        "/by-nc/4.0": "CC BY-NC 4.0",
+        "/by-nc-sa/1.0": "CC BY-NC-SA 1.0",
+        "/by-nc-sa/2.0": "CC BY-NC-SA 2.0",
+        "/by-nc-sa/2.5": "CC BY-NC-SA 2.5",
+        "/by-nc-sa/3.0": "CC BY-NC-SA 3.0",
+        "/by-nc-sa/4.0": "CC BY-NC-SA 4.0",
+        "/by-nd/1.0": "CC BY-ND 1.0",
+        "/by-nd/2.0": "CC BY-ND 2.0",
+        "/by-nd/2.5": "CC BY-ND 2.5",
+        "/by-nd/3.0": "CC BY-ND 3.0",
+        "/by-nd/4.0": "CC BY-ND 4.0",
+        "/by-nd-nc/1.0": "CC BY-ND-NC 1.0",
+        "/by-nc-nd/2.0": "CC BY-NC-ND 2.0",
+        "/by-nc-nd/2.5": "CC BY-NC-ND 2.5",
+        "/by-nc-nd/3.0": "CC BY-NC-ND 3.0",
+        "/by-nc-nd/4.0": "CC BY-NC-ND 4.0",
+        "creativecommons.org/share-your-work/public-domain/cc0": "CC0",
+        "creativecommons.org/publicdomain/zero/1.0": "CC0 1.0",
+      };
+      var bigNames = {
+        "CC BY 1.0": "Creative Commons Attribution 1.0 Generic",
+        "CC BY 2.0": "Creative Commons Attribution 2.0 Generic",
+        "CC BY 2.5": "Creative Commons Attribution 2.5 Generic",
+        "CC BY 3.0": "Creative Commons Attribution 3.0 Unported",
+        "CC BY 4.0": "Creative Commons Attribution 4.0 International",
+        "CC BY-SA 1.0": "Creative Commons Attribution-ShareAlike 1.0 Generic",
+        "CC BY-SA 2.0": "Creative Commons Attribution-ShareAlike 2.0 Generic",
+        "CC BY-SA 2.5": "Creative Commons Attribution-ShareAlike 2.5 Generic",
+        "CC BY-SA 3.0": "Creative Commons Attribution-ShareAlike 3.0 Unported",
+        "CC BY-SA 4.0": "Creative Commons Attribution-ShareAlike 4.0 International",
+        "CC BY-NC 1.0": "Creative Commons Attribution-NonCommercial 1.0 Generic",
+        "CC BY-NC 2.0": "Creative Commons Attribution-NonCommercial 2.0 Generic",
+        "CC BY-NC 2.5": "Creative Commons Attribution-NonCommercial 2.5 Generic",
+        "CC BY-NC 3.0": "Creative Commons Attribution-NonCommercial 3.0 Unported",
+        "CC BY-NC 4.0": "Creative Commons Attribution-NonCommercial 4.0 International",
+        "CC BY-NC-SA 1.0": "Creative Commons Attribution-NonCommercial-ShareAlike 1.0 Generic",
+        "CC BY-NC-SA 2.0": "Creative Commons Attribution-NonCommercial-ShareAlike 2.0 Generic",
+        "CC BY-NC-SA 2.5": "Creative Commons Attribution-NonCommercial-ShareAlike 2.5 Generic",
+        "CC BY-NC-SA 3.0": "Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported",
+        "CC BY-NC-SA 4.0": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+        "CC BY-ND 1.0": "Creative Commons Attribution-NoDerivs 1.0 Generic",
+        "CC BY-ND 2.0": "Creative Commons Attribution-NoDerivs 2.0 Generic",
+        "CC BY-ND 2.5": "Creative Commons Attribution-NoDerivs 2.5 Generic",
+        "CC BY-ND 3.0": "Creative Commons Attribution-NoDerivs 3.0 Unported",
+        "CC BY-ND 4.0": "Creative Commons Attribution-NoDerivatives 4.0 International",
+        "CC BY-ND-NC 1.0": "Creative Commons Attribution-NoDerivs-NonCommercial 1.0 Generic",
+        "CC BY-NC-ND 2.0": "Creative Commons Attribution-NonCommercial-NoDerivs 2.0 Generic",
+        "CC BY-NC-ND 2.5": "Creative Commons Attribution-NonCommercial-NoDerivs 2.5 Generic",
+        "CC BY-NC-ND 3.0": "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported",
+        "CC BY-NC-ND 4.0": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International",
+        "CC0": "No Rights Reserved",
+        "CC0 1.0": "Creative Commons CC0 1.0 Universal",
+      };
       btn.addEventListener("click", function(){
         btn.innerHTML = btnText;
         // var licenseTextE = document.getElementsByClassName("license-text");
@@ -168,14 +245,14 @@
         var headingParts = getDivsWhereClassStartsWith(titlePrefix);
         var headingCreatedParts = getDivsWhereClassStartsWith(headingCreatedPrefix);
         if (headingParts.length > 0) {
-        	info.title = headingParts[0].textContent;
+          info.title = headingParts[0].textContent;
         }
         else {
           console.warn("The title is missing. There are no divs with a class starting with " + titlePrefix);
         }
         var createdStr = null;
         if (headingCreatedParts.length > 0) {
-        	createdStr = headingCreatedParts[0].textContent;
+          createdStr = headingCreatedParts[0].textContent;
         }
         else {
           console.warn("The date is missing. There are no divs with a class starting with " + headingCreatedParts);
@@ -215,7 +292,13 @@
         var sep = " - ";
         for (ai = 0; ai < aspects.length; ai++) {
           var aspectImg = aspects[ai];
-          if (aspectImg.src.endsWith("cc.svg")) {
+          if (aspectImg.src == undefined) {
+            console.error("The license symbol src was undefined.");
+          }
+          else if (aspectImg.src == "") {
+            console.error("The license symbol src was blank.");
+          }
+          else if (aspectImg.src.endsWith("cc.svg")) {
             info.license += "Creative Commons";
           }
           else if (aspectImg.src.endsWith("nc.svg")) {
@@ -235,11 +318,16 @@
             info.license = "Creative Commons Zero";
           }
           else {
-            console.error("The license symbol list has an unknown clause symbol: " + aspectImg.src);
+            console.error("The license symbol list has an unknown clause symbol: \"" + aspectImg.src + "\"");
           }
         }
         if (info.license != undefined) {
-        	console.log("The symbols indicate the following license: " + info.license);
+          if (info.license == "") {
+            console.log("The symbols do not indicate a license (The site layout appears to be broken or changed so the license must be detected from the license URL if possible instead).");
+          }
+          else {
+            console.log("The symbols indicate the following license: " + info.license);
+          }
         }
 
         // Format the info and copy it to the clipboard:
@@ -251,11 +339,13 @@
           console.log("Checking " + licenseAnchors.length + " license anchors...");
           for (var lai=0, max=licenseAnchors.length; lai < max; lai++) {
             var licenseA = licenseAnchors[lai];
-            // console.log("  checking " + licenseA.className + "...");
+            if (verbose) {
+              console.log("  checking " + licenseA.className + "...");
             // NOTE: .getAttribute("href") gets the raw value, but .href gets the resulting full URL.
-            // console.log("  licenseA.href: " + typeof licenseA.href);
-            // console.log("  licenseA.href.toString: " + typeof licenseA.href.toString);
-            // console.log("  licenseA.href.toString().includes: " + typeof licenseA.href.toString().includes);
+              console.log("  licenseA.href is a " + typeof licenseA.href);
+              console.log("  licenseA.href.toString is a " + typeof licenseA.href.toString);
+              console.log("  licenseA.href.toString().includes is a " + typeof licenseA.href.toString().includes);
+            }
             if (licenseA.href === undefined) {
               console.warn("A license a.href is undefined.");
             }
@@ -268,11 +358,13 @@
               console.warn("A license a.href.toString.includes is not a function.");
             }
             else if (!licenseA.href.includes("thingiverse.com")) {
-              // console.log("licenseA.href: ");
-              // console.log("'",licenseA.href, "'");
+              if (verbose) {
+                console.log("licenseA.href: ");
+                console.log("'",licenseA.href, "'");
+              }
               info.licenseHref = licenseA.href;
               if (info.licenseHref.slice(-3, -2) == ".") {
-              	exactLicenseVersion = licenseA.href.slice(-4, -1);
+                exactLicenseVersion = licenseA.href.slice(-4, -1);
               }
               else {
                 console.warn("slice at -3 is not .: " + info.licenseHref.slice(-3, -2));
@@ -281,9 +373,11 @@
             else {
               info.author = licenseA.textContent;
               info.authorHref = licenseA.href;
-              // console.log("unused[]: " + licenseA.href);
-              // console.log("author: " + info.author);
-              // console.log("authorHref: " + info.authorHref);
+              if (verbose) {
+                console.log("unused[]: " + licenseA.href);
+                console.log("author: " + info.author);
+                console.log("authorHref: " + info.authorHref);
+              }
             }
           }
         }
@@ -366,15 +460,63 @@
               }
             }
           }
+
           if (info.licenseHref) {
             outputStr += "[" + info.license + "](" + info.licenseHref + ")";
           }
           else {
+            // console.log("* skipping long name detection since a license was detected: \""+info.license+"\"");
             outputStr += info.license;
           }
           if (licenseShortStr.length > 0) {
             outputStr += "\n  (" + licenseShortStr + ")";
           }
+        }
+        else if (info.licenseHref) {
+          if (!licenseShortStr) {
+            if (verbose) {
+              console.log("Generating short license name from URL instead of from clauses...");
+            }
+            for (var key in urlSmallNames) {
+              // Check if the property/key is defined in the object itself, not in parent
+              if (urlSmallNames.hasOwnProperty(key)) {
+                if (info.licenseHref.includes(key)) {
+                  licenseShortStr = urlSmallNames[key];
+                  if (verbose) {
+                    console.log("- got \""+licenseShortStr+"\" from \""+key+"\"")
+                  }
+                  break;
+                }
+              }
+            }
+          }
+          else {
+            console.log("* using existing licenseShortStr \""+licenseShortStr+"\"");
+          }
+          if (!licenseShortStr) {
+            console.warn("Warning: The URL \""+info.licenseHref+"\" is not recognized (No key in Thing Remix Attribution Maker's urlSmallNames is a partial of the URL), so the long license name could not be generated.");
+          }
+          else {
+            if (!info.license) {
+              if (verbose) {
+                console.log("Generating long license name from URL instead of from clauses...");
+              }
+              if (bigNames.hasOwnProperty(licenseShortStr)) {
+                // ^ The clauses are only in this order for versions above 1.0!
+                info.license = bigNames[licenseShortStr];
+                if (verbose) {
+                  console.log("- got \""+info.license+"\"");
+                }
+                outputStr += "\n- ["+info.license+"]("+info.licenseHref+")\n  "+licenseShortStr;
+              }
+              else {
+                console.warn("Warning: The short license name \""+licenseShortStr+"\" is not recognized (It is not a key in Thing Remix Attribution Maker's bigNames), so the long license name could not be generated.");
+              }
+            }
+          }
+        }
+        else if (!info.license) {
+          console.warn("The license abbreviation cannot be generated because no license text was generated (no license elements were detected).");
         }
         else {
           console.warn("The license abbreviation cannot be generated for an unknown license: " + info.license);
@@ -440,7 +582,7 @@
   }//end addButton
   function checkIfComplete() {
     // console.log("Monitoring page loading...");
-		var ready = true;
+    var ready = true;
     var containers = getDivsWhereClassStartsWith(madeDivClassName);
     // console.log("Checking for completed page content...");
     if (containers.length == 1) {
