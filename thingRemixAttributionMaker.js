@@ -146,7 +146,7 @@
     // This should run when ThingPage_galleryHeader* gets filled in, but only once to prevent an infinite loop.
     var info = {};
     // var pageInfoEs = document.getElementsByClassName("item-page-info");
-    // NOTE: now ThingiVerse is a React app, so you must use inspect to see the HTML.
+    // NOTE: now Thingiverse is a React app, so you must use inspect to see the HTML.
     // "ThingPage__madeBy*" includes parts such as:
     // - `ThingPage__modelName*`
     // - `<div class="ThingPage__createdBy*">by <a ...>UserName</a>MON D, YYYY`
@@ -311,10 +311,10 @@
             info.license += sep + "Attribution";
           }
           else if (aspectImg.src.endsWith("sa.svg")) {
-            info.license += sep + "ShareAlike"; // It has a space on ThingiVerse, but that is not correct.
+            info.license += sep + "ShareAlike"; // It has a space on Thingiverse, but that is not correct.
           }
           else if (aspectImg.src.endsWith("zero.svg")) {
-             // It is preceded by by.svg on ThingiVerse, but that is not correct.
+             // It is preceded by by.svg on Thingiverse, but that is not correct.
             info.license = "Creative Commons Zero";
           }
           else {

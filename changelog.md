@@ -1,4 +1,10 @@
 # Changelog
+
+## [unreleased] - 2021-06-11
+### Fixed
+- Correct the case of "Thingiverse" (That is the correct case).
+
+
 ## [2.1.0] - 2021-06-11
 ### Added
 - Add lookup tables to detect the license short name and long name from the URL if necessary
