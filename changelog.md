@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [2.1.3] - 2021-08-24
+### Fixed
+- Fix two incorrect checks of the short license string.
+
 ## [2.1.2] - 2021-08-24
 ### Fixed
 - Fix a misplaced `else if`.
