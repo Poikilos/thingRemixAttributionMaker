@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.1] - 2021-08-24
+### Changed
+- Refactor the code to make more of it reusable.
+
 ## [unreleased] - 2021-06-11
 ### Fixed
 - Correct the case of "Thingiverse" (That is the correct case).
