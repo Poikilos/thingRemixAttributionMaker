@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.2] - 2021-08-24
+### Fixed
+- Fix a misplaced `else if`.
+
 ## [2.1.1] - 2021-08-24
 ### Changed
 - Refactor the code to make more of it reusable.

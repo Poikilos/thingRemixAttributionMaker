@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Thing Remix Attribution Maker
 // @namespace    http://poikilos.org/
-// @version      2.1.1
+// @version      2.1.2
 // @description  Format the license information from a thing page
 // @author       Poikilos (Jake Gustafson)
 // @include      https://www.thingiverse.com/thing:*
@@ -454,7 +454,7 @@
         }
       }
     }
-    else if (!info.license) {
+    if (!info.license) {
       console.warn("The license abbreviation cannot be generated because no license text was generated (no license elements were detected).");
     }
     else {
