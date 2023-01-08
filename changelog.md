@@ -1,17 +1,24 @@
 # Changelog
 
+## [3.0.0] - 2023-01-07
+### Fixed
+- Adapt to the latest change to the site.
+
 
 ## [2.1.3] - 2021-08-24
 ### Fixed
 - Fix two incorrect checks of the short license string.
 
+
 ## [2.1.2] - 2021-08-24
 ### Fixed
 - Fix a misplaced `else if`.
 
+
 ## [2.1.1] - 2021-08-24
 ### Changed
 - Refactor the code to make more of it reusable.
+
 
 ## [unreleased] - 2021-06-11
 ### Fixed

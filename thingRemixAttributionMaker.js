@@ -1,23 +1,25 @@
 // ==UserScript==
 // @name         Thing Remix Attribution Maker
 // @namespace    http://poikilos.org/
-// @version      2.1.3
+// @version      3.0.0
 // @description  Format the license information from a thing page
 // @author       Poikilos (Jake Gustafson)
-// @include      https://www.thingiverse.com/thing:*
+// @match      https://www.thingiverse.com/thing:*
 // @grant        none
 // @run-at          document-end
 // ==/UserScript==
 
 (function() {
+  // now its @match again :eyeroll: -- eslint says it may be obsolete in Manifest v3 in early 2023
+  // formerly @include      https://www.thingiverse.com/thing:*
   // formerly @match        https://www.thingiverse.com/thing:*
-  var verbose = false;
+  var verbose = true;
   var checkTimer = null;
-  var madeDivClassName = "ThingPage__madeBy";
   var licenseClauseImgPrefix = "License__img";
-  var licenseAnchorPrefix = "License__link"; // INFO: it could be author OR license link
-  var titlePrefix = "ThingPage__modelName";
-  var headingCreatedPrefix = "ThingPage__createdBy";
+  var licenseAnchorPrefix = "License__link"; // INFO: License__link* could be author OR license link; author also has License__creator* class.
+  var titlePrefix = "ThingTitle__modelName";
+  var headingCreatedPrefix = "ThingTitle__createdBy";
+  var madeDivClassName = "ThingTitle__madeBy"; // doneDivPrefixes' container[0]'s class (a.k.a. .className)
   var doneDivPrefixes = [titlePrefix, headingCreatedPrefix];
   var clausesContainerPrefix = "License__ccLicense";
   var doneDivPrefixesMain = [clausesContainerPrefix];
@@ -165,16 +167,15 @@
     var all = el.childNodes;
     for (var i=0, max=all.length; i < max; i++) {
       var thisEl = all[i];
-      if (thisEl.className.startsWith(str)) {
+      if ((thisEl.className != undefined) && thisEl.className.startsWith(str)) {
         els.push(thisEl);
-        // console.log("- FOUND");
       }
       else {
-        // console.log("- "+el.className+" does not start with it.");
+        // console.log("- "+el.className+" does not start with "+str+".");
       }
     }
     if (verbose) {
-      console.log("- FOUND " + els.length);
+      console.log("- FOUND " + els.length + " " + str);
       // console.log("- done (div count: " + all.length + ")");
     }
     return els;
@@ -686,27 +687,29 @@
   }//end addButton
   function checkIfComplete() {
     // console.log("Monitoring page loading...");
-    var ready = true;
+    var missing_errors = "";
     var containers = getDivsWhereClassStartsWith(madeDivClassName);
     // console.log("Checking for completed page content...");
     if (containers.length == 1) {
       if (!elementHasAllPrefixes(containers[0], doneDivPrefixes)) {
-        ready = false;
-        // console.log("The "+containers[0].className+" container is not complete:");
-        // console.log("The document is not ready yet ("+containers[0].className+" does not contain the classes with the prefixes \""+JSON.stringify(doneDivPrefixes)+"\").");
+        missing_errors += "containers[0].className " + containers[0].className + " with all of " + JSON.stringify(doneDivPrefixes) + ". ";
+        if (verbose) {
+          // console.log("The "+containers[0].className+" container is not complete:");
+          // console.log("The document is not ready yet ("+containers[0].className+" does not contain the classes with the prefixes \""+JSON.stringify(doneDivPrefixes)+"\").");
+        }
       }
     }
     else {
-      ready = false;
+      missing_errors += "any container (required). ";
       // console.log("The page is not formatted as expected:");
       // console.log(containers.length + " is an unexpected count for divs with a class named like " + madeDivClassName + "*.");
     }
     if (!hasAllDivPrefixes(doneDivPrefixesMain)) {
-      ready = false;
+      missing_errors += "hasAllDivPrefixes("+JSON.stringify(doneDivPrefixesMain)+"). ";
       // console.log("The document is not complete:");
       // console.log("The document is not ready yet (the document does not contain the class(es) with the prefix(es) \""+JSON.stringify(doneDivPrefixesMain)+"\").");
     }
-    if (ready) {
+    if (missing_errors.length == 0) {
       if (verbose) {
         console.log("The page has loaded.");
       }
@@ -715,7 +718,7 @@
       console.log("The license detection will resume after a user clicks the copy license button.");
     }
     else {
-      console.log("The document is not ready (or is missing required fields)...");
+      console.log("The document is not ready (or is a new format). It is missing: "+missing_errors);
     }
   }
   checkTimer = setInterval(checkIfComplete, 2000);
