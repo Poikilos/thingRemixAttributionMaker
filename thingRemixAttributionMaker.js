@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Thing Remix Attribution Maker
 // @namespace    http://poikilos.org/
-// @version      3.0.0
+// @version      4.0.0
 // @description  Format the license information from a thing page
 // @author       Poikilos (Jake Gustafson)
 // @match      https://www.thingiverse.com/thing:*
@@ -100,9 +100,23 @@
     var all = document.getElementsByTagName("*");
     for (var i=0, max=all.length; i < max; i++) {
       var el = all[i];
-      if (el.className.startsWith(str)) {
+      if (el.className && !el.className.startsWith) {
+        // Why This started happening (className.startsWith not existing) when className is true is unclear.
+        if (el.class) {
+            console.log("Warning: no el.className.startsWith for class="+el.class+" + el.className="+el.className);
+        }
+        else {
+            console.log("Warning: no el.className.startsWith for el.className="+el.className);
+        }
+      }
+
+      if (el.class && el.class.startsWith(str)) {
         els.push(el);
       }
+      else if (el.className && el.className.startsWith && el.className.startsWith(str)) {
+        els.push(el);
+      }
+
     }
     if (verbose) {
       console.log("- FOUND " + els.length);
@@ -465,6 +479,11 @@
 
   function setClipboardText(text, callbackBtn) {
     var msg = "(ERROR: Your browser API is unknown.)";
+    if (callbackBtn == null) {
+        msg = "Error: no callbackBtn";
+        console.log(msg);
+        return msg;
+    }
     var okMsg = " &#10003;";
     // See https://stackoverflow.com/questions/52177405/clipboard-writetext-doesnt-work-on-mozilla-ie
     if (navigator.clipboard != undefined) { // Chrome
@@ -668,8 +687,8 @@
     //or:
     // See https://www.w3schools.com/jsref/met_document_createelement.asp
     var btn = document.createElement("BUTTON"); // Create a <button> element
-    btn.setAttribute("class", "button button-secondary");
-    btn.setAttribute("style", "background-color: rgb(50%, 50%, 50%)");
+    btn.setAttribute("class", "button button-secondary"); // as of 2023 button class names are obfuscated :(
+    // btn.setAttribute("style", "background-color: rgb(50%, 50%, 50%)");
     var btnText = "Copy License for Remix";
     btn.innerHTML = btnText; // Insert text
     // Any URL starting with a slash comes after: "https://creativecommons.org/licenses"
